@@ -1,6 +1,8 @@
 package com.epam.edu.spring.core.template.repository;
 
 import com.epam.edu.spring.core.template.entity.Item;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Репозиторий, основанный на классе LinkedList.
@@ -8,21 +10,24 @@ import com.epam.edu.spring.core.template.entity.Item;
  */
 public class LinkedListItemRepository extends AbstractRepository<Item> implements ItemRepository {
 
+    private final List<Item> linkedList = new LinkedList<>();
+
     @Override
     public Item getById(long id) {
-        return null;
+        return holder.stream().filter(item -> item.getId() == (id + initialSequence)).findAny().orElse(null);
     }
 
     @Override
     public boolean createItem(Item item) {
-        return false;
+        item.setId(item.getId() + initialSequence);
+        return holder.add(item);
     }
 
-    void setInitialSequence(int val) {
-        //TODO
+    public void setInitialSequence(int val) {
+        this.initialSequence = val;
     }
 
-    void setHolder() {
-        //TODO
+    public void setHolder() {
+        this.holder = linkedList;
     }
 }
